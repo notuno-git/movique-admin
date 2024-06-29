@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import img from './mmm.jpg'
+import axios from 'axios';
+import img from './mmm.jpg';
 
 const reviews = [
   {
     id: 1,
     profileImage: img,
-    userName: 'Rohit Kumar',
+    userName: 'admin',
     time: '8 hours',
     rating: 2,
     reviewText: 'Honestly Its a fine thriller. The major turn off in this movie is nothing but the Hero itself, Rajasekhar is a good actor, but in this movie they tried to present him as a 30-35 year old look while he looks more aged, imperfect make up and hair style pulling back the viewers while enjoying the movie itself, also Pairing with so young Adah Sharma, is totally not synced.'
@@ -24,13 +25,34 @@ const reviews = [
 
 const DetailsPage = () => {
   const { id } = useParams();
-  // const movie = movies.find(movie => movie.id === parseInt(id));
+  const [movie, setMovie] = useState(null);
 
-  // if (!movie) {
-  //     return <div>Movie not found</div>;
-  // }
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      const options = {
+        method: 'GET',
+        url: `https://api.themoviedb.org/3/movie/${id}`,
+        params: { language: 'en-US' },
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NDM1OTYyYzU0ODRmNmYyMzE5ZWZmOGE0ZGVhYTUwYiIsInN1YiI6IjY2NTAzZWUxMmRjYWM3MWRjMjBhNmQxOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.oYeY6hKZrTN7lGHc59csGeeabbCHfrtZb9LfQkmSbZE'
+        }
+      };
 
-  console.log(id);
+      try {
+        const response = await axios.request(options);
+        setMovie(response.data);
+      } catch (error) {
+        console.error('Error fetching the movie details:', error);
+      }
+    };
+
+    fetchMovieDetails();
+  }, [id]);
+
+  if (!movie) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">
@@ -40,49 +62,34 @@ const DetailsPage = () => {
         <div className='col-md-6 col-12 my-2'>
           <div className='w-full h-full'>
             <img
-              src={img}
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
               className='img-fluid'
             />
           </div>
         </div>
 
         <div className='col-md-6 col-12 my-2'>
-          <h5 className='details-heading'>Kalki</h5>
-          <p className='result'>Fury is born.</p>
-          <p className='result'><b>Overview : </b><br /> As the world fell, young Furiosa is snatched from the Green Place of Many Mothers and falls into the hands of a great Biker Horde led by the Warlord Dementus. Sweeping through the Wasteland they come across the Citadel presided over by The Immortan Joe. While the two Tyrants war for dominance, Furiosa must survive many trials as she puts together the means to find her way home.</p>
-          <p className='result'><b>Rating : </b>4+</p>
-          <p className='result'><b>View  : </b>1197</p>
-          <p className='result'><b>Duration : </b>2h 5m</p>
-          <p className='result'><b>Staus : </b>Released</p>
-          <p className='result'><b>Release Date : </b>May 22nd 2024</p>
-          <p className='result'><b>Revenue : </b>168076980</p>
-          <p className='result'><b>Director : </b>George Miller</p>
-          <p className='result'><b>Writer : </b>George Miller, Nico Lathouris</p>
+          <h5 className='details-heading'>{movie.title}</h5>
+          <p className='result'>{movie.tagline}</p>
+          <p className='result'><b>Overview: </b><br /> {movie.overview}</p>
+          <p className='result'><b>Rating: </b>{movie.vote_average}</p>
+          <p className='result'><b>View: </b>{movie.popularity}</p>
+          <p className='result'><b>Duration: </b>{movie.runtime} minutes</p>
+          <p className='result'><b>Status: </b>{movie.status}</p>
+          <p className='result'><b>Release Date: </b>{movie.release_date}</p>
+          <p className='result'><b>Revenue: </b>${movie.revenue}</p>
+          <p className='result'><b>Director: </b>{movie.director}</p>
+          <p className='result'><b>Writer: </b>{movie.writer}</p>
         </div>
 
         <div className='col-md-12 my-2'>
-          <h5 className='details-heading'>Cast :</h5>
-          {/* <div className='grid grid-cols-[repeat(auto-fit,96px)] gap-5 my-4'>
-            {
-              castData?.cast?.filter(el => el?.profile_path).map((starCast, index) => {
-                return (
-                  <div key={starCast.id} onClick={() => handleCastClick(starCast.id)}>
-                    <div>
-                      <img
-                        src={imageURL + starCast?.profile_path}
-                        className='w-24 h-24 object-cover rounded-full'
-                      />
-                    </div>
-                    <p className='font-bold text-center text-sm text-neutral-400'>{starCast?.name}</p>
-                  </div>
-                )
-              })
-            }
-          </div> */}
+          <h5 className='details-heading'>Cast:</h5>
+          {/* Add cast data rendering here */}
         </div>
 
         <div className='col-md-12 my-2'>
-          <h5 className='details-heading mb-4'>Audience reviews & Rating :</h5>
+          <h5 className='details-heading mb-4'>Audience reviews & Rating:</h5>
 
           {reviews.map(review => (
             <div key={review.id} className='review-rating'>
@@ -108,7 +115,7 @@ const DetailsPage = () => {
 
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DetailsPage
+export default DetailsPage;

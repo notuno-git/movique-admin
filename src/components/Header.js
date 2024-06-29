@@ -10,7 +10,7 @@ const Header = () => {
             <div className="dropdown">
                 <button className="user dropdown-toggle" type="button" id="userDrop" data-bs-toggle="dropdown" aria-expanded="false">
                     <div className='user-icon'><i className="fas fa-user-alt"></i></div>
-                    Rohit
+                    Admin
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="userDrop">
                     <li><a className="dropdown-item" href="#">Logout</a></li>
