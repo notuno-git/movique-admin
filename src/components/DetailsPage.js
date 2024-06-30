@@ -152,6 +152,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import img from './mmm.jpg';
 import db from "../appwrite/database";
+import { toast } from 'react-toastify';
 
 const DetailsPage = () => {
   const { id } = useParams();
@@ -202,7 +203,8 @@ const DetailsPage = () => {
     try {
       console.log(payload, 'payload');
       await db.movies.create(payload);
-      alert('Review submitted successfully!');
+      // alert('Review submitted successfully!');
+      
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('Error submitting review.');
@@ -240,6 +242,8 @@ const DetailsPage = () => {
           <p className='result'><b>Director: </b>{movie.director}</p>
           <p className='result'><b>Writer: </b>{movie.writer}</p>
         </div>
+
+        <a href={`https://www.movique.in/movies/${id}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary my-2">View on Movique</a>
 
         <div className='col-md-12 my-2'>
           <h5 className='details-heading mb-4'>Submit Review</h5>

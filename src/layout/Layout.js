@@ -6,6 +6,8 @@ import Dashboard from '../components/Dashboard';
 import { Routes, Route, Link } from 'react-router-dom';
 import DetailsPage from '../components/DetailsPage';
 import EditPage from '../components/EditPage';
+import SearchMovies from '../components/SearchMovies';
+import LoginPage from '../components/LoginPage';
 
 const Layout = () => {
   const [isToggled, setIsToggled] = useState(true);
@@ -52,6 +54,13 @@ const Layout = () => {
                   { title: 'TV Shows', link: '/tvshows' }, // Placeholder for additional routes
                 ]}
               />
+              
+              <li>
+                <Link to="/search">
+                  <i className="fas fa-search"></i>
+                  <span>Search</span>
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -63,9 +72,11 @@ const Layout = () => {
         <div className="page-content-container">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/search" element={< SearchMovies />} />
             <Route path="/movies" element={<MovieList />} />
             <Route path="/movies/details/:id" element={<DetailsPage />} />
             <Route path="/movies/edit/:id" element={<EditPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </div>
       </main>
