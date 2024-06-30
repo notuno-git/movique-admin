@@ -48,8 +48,8 @@ const columns = [
     name: 'Actions',
     cell: row => (
       <div className="d-flex justify-content-center">
-        <Link to={`/movies/details/${row.id}`} className="btn btn-lists mr-2"><i className="far fa-eye"></i></Link>
-        <Link to={`/movies/edit/${row.id}`} className="btn btn-lists"><i className="far fa-edit"></i></Link>
+        <Link to={`/movies/details/${row.id}`} className="btn btn-lists mr-2"><i className="far fa-edit"></i></Link>
+        {/* <Link to={`/movies/edit/${row.id}`} className="btn btn-lists"><i className="far fa-edit"></i></Link> */}
       </div>
     ),
     ignoreRowClick: true,
