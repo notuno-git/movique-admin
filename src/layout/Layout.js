@@ -56,12 +56,12 @@ const Layout = () => {
                 ]}
               />
               
-              <li>
+              {/* <li>
                 <Link to="/search">
                   <i className="fas fa-search"></i>
                   <span>Search</span>
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -75,9 +75,9 @@ const Layout = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/search" element={< SearchMovies />} />
             <Route path="/movies" element={<MovieList />} />
-            {/* <Route path="/tvshows" element={<TvShowsList />} /> */}
+            <Route path="/tvshows" element={<TvShowsList />} />
             <Route path="/movies/details/:id" element={<DetailsPage />} />
-            {/* <Route path="/tvshows/details/:id" element={<TvDetailsPage />} /> */}
+            <Route path="/tvshows/details/:id" element={<TvDetailsPage />} />
             <Route path="/login" element={<LoginPage />} />
           </Routes>
         </div>
