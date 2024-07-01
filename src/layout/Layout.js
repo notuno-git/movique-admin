@@ -5,9 +5,10 @@ import MovieList from '../components/MovieList';
 import Dashboard from '../components/Dashboard';
 import { Routes, Route, Link } from 'react-router-dom';
 import DetailsPage from '../components/DetailsPage';
-import EditPage from '../components/EditPage';
 import SearchMovies from '../components/SearchMovies';
 import LoginPage from '../components/LoginPage';
+import TvShowsList from '../components/TvShowsList';
+import TvDetailsPage from '../components/TvDetailsPage';
 
 const Layout = () => {
   const [isToggled, setIsToggled] = useState(true);
@@ -74,8 +75,9 @@ const Layout = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/search" element={< SearchMovies />} />
             <Route path="/movies" element={<MovieList />} />
+            {/* <Route path="/tvshows" element={<TvShowsList />} /> */}
             <Route path="/movies/details/:id" element={<DetailsPage />} />
-            <Route path="/movies/edit/:id" element={<EditPage />} />
+            {/* <Route path="/tvshows/details/:id" element={<TvDetailsPage />} /> */}
             <Route path="/login" element={<LoginPage />} />
           </Routes>
         </div>

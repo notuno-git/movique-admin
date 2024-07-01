@@ -148,20 +148,21 @@
 // export default DetailsPage;
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import img from './mmm.jpg';
 import db from "../appwrite/database";
 import { toast } from 'react-toastify';
+import { Form, Button } from 'react-bootstrap';
+import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 const DetailsPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate()
   const [movie, setMovie] = useState(null);
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    rating: 1,
-  });
+  const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -186,25 +187,23 @@ const DetailsPage = () => {
     fetchMovieDetails();
   }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       movie_id: id,
-      star: parseInt(form.rating, 10),
-      title_description: form.title,
-      description: form.description
+      star: parseInt(rating, 10),
+      title_description: title,
+      description: description
     };
 
     try {
       console.log(payload, 'payload');
       await db.movies.create(payload);
-      // alert('Review submitted successfully!');
-      
+      alert('Review submitted successfully!');
+      setRating(1)
+      setTitle('')
+      setDescription('')
+
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('Error submitting review.');
@@ -215,8 +214,35 @@ const DetailsPage = () => {
     return <div>Loading...</div>;
   }
 
+  const handleRatingChange = (e) => {
+    const value = parseFloat(e.target.value);
+    if (!isNaN(value) && value >= 0 && value <= 10) {
+      setRating(value);
+    } else if (e.target.value === '') {
+      setRating(0); // Handle empty input
+    }
+  };
+
+  const renderStars = () => {
+    const filledStars = Math.floor(rating);
+    const hasHalfStar = rating - filledStars >= 0.5;
+    const emptyStars = 10 - filledStars - (hasHalfStar ? 1 : 0);
+
+    return (
+      <div className="d-flex">
+        {[...Array(filledStars)].map((_, index) => (
+          <FaStar key={index} className="star" color="#ffc107" size={40} />
+        ))}
+        {hasHalfStar && <FaStarHalfAlt className="star" color="#ffc107" size={40} />}
+        {[...Array(emptyStars)].map((_, index) => (
+          <FaStar key={index} className="star" color="#e4e5e9" size={40} />
+        ))}
+      </div>
+    );
+  };
+
   return (
-    <div className="container">
+    <div className="details container">
       <h2 className="list-heading">Movie Details</h2>
       <div className='row'>
         <div className='col-md-6 col-12 my-2'>
@@ -233,59 +259,63 @@ const DetailsPage = () => {
           <h5 className='details-heading'>{movie.title}</h5>
           <p className='result'>{movie.tagline}</p>
           <p className='result'><b>Overview: </b><br /> {movie.overview}</p>
-          <p className='result'><b>Rating: </b>{movie.vote_average}</p>
-          <p className='result'><b>View: </b>{movie.popularity}</p>
+          <p className='result'><b>Rating: </b>{(movie.vote_average).toFixed(1)}</p>
+          <p className='result'><b>View: </b>{(movie.popularity).toFixed(1)}</p>
           <p className='result'><b>Duration: </b>{movie.runtime} minutes</p>
           <p className='result'><b>Status: </b>{movie.status}</p>
           <p className='result'><b>Release Date: </b>{movie.release_date}</p>
           <p className='result'><b>Revenue: </b>${movie.revenue}</p>
           <p className='result'><b>Director: </b>{movie.director}</p>
           <p className='result'><b>Writer: </b>{movie.writer}</p>
+          <p className='result'>
+            <a href={`https://www.movique.in/movies/${id}`} target="_blank" rel="noopener noreferrer" className="btn btn-lists my-2">View on movique website</a>
+          </p>
         </div>
 
-        <a href={`https://www.movique.in/movies/${id}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary my-2">View on Movique</a>
-
-        <div className='col-md-12 my-2'>
-          <h5 className='details-heading mb-4'>Submit Review</h5>
-          <form onSubmit={handleSubmit}>
-            <div className='form-group'>
-              <label htmlFor="title">Title</label>
-              <input
-                className='form-control my-2'
-                type="text"
-                id='title'
-                name='title'
-                value={form.title}
-                onChange={handleChange}
+        <div className="container mt-5">
+          <h2 className="details-heading mb-4">Submit Review</h2>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Rating (1 to 10)</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.1"
+                value={rating}
+                onChange={handleRatingChange}
+                min="0"
+                max="10"
+                required
               />
-              <label htmlFor="description">Description</label>
-              <textarea
-                className="form-control my-2"
-                id="description"
-                name="description"
-                rows="3"
-                value={form.description}
-                onChange={handleChange}
-              ></textarea>
+              <div className="mt-3">{renderStars()}</div>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <div className='d-flex' style={{ gap: '20px' }}>
+              <Button variant="secondary" className="w-100" onClick={() => navigate('/movies')}>
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" className="btn-lists w-100">
+                Submit Review
+              </Button>
             </div>
-            <div className='form-group'>
-              <label htmlFor="rating">Star Rating: </label>
-              <select
-                className="form-select mx-2"
-                id="rating"
-                name="rating"
-                value={form.rating}
-                onChange={handleChange}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
-          </form>
+          </Form>
         </div>
       </div>
     </div>
