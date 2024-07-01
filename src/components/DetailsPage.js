@@ -267,9 +267,9 @@ const DetailsPage = () => {
           <p className='result'><b>Revenue: </b>${movie.revenue}</p>
           <p className='result'><b>Director: </b>{movie.director}</p>
           <p className='result'><b>Writer: </b>{movie.writer}</p>
-          <p className='result'>
-            <a href={`https://www.movique.in/movies/${id}`} target="_blank" rel="noopener noreferrer" className="btn btn-lists my-2">View on movique website</a>
-          </p>
+          {/* <p className='result'> */}
+            {/* <a href={`https://www.movique.in/movies/${id}`} target="_blank" rel="noopener noreferrer" className="btn btn-lists my-2">View on movique website</a> */}
+          {/* </p> */}
         </div>
 
         <div className="container mt-5">
