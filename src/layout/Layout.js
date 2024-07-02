@@ -56,12 +56,12 @@ const Layout = () => {
                 ]}
               />
               
-              {/* <li>
+              <li>
                 <Link to="/search">
                   <i className="fas fa-search"></i>
                   <span>Search</span>
                 </Link>
-              </li> */}
+              </li>
             </ul>
           </div>
         </div>
