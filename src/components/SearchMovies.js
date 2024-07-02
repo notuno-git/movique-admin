@@ -92,15 +92,15 @@ const SearchMovies = () => {
   return (
     <div className="container">
       <h2 className="list-heading">Search Movies</h2>
-      <form onSubmit={handleSearch} className="form-inline">
+      <form onSubmit={handleSearch} className="form-inline search-form">
         <input
           type="text"
-          className="form-control mb-2 mr-sm-2"
+          className="form-control mb-2"
           placeholder="Search for movies..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit" className="btn btn-primary mb-2">Search</button>
+        <button type="submit" className="btn btn-lists mb-2"><i className="fas fa-search"></i></button>
       </form>
       <DataTable
         columns={columns}

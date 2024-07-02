@@ -620,3 +620,19 @@ body {
 .list-search-bar {
   width: 300px;
 }
+
+.search-form {
+  margin-top: 20px;
+}
+
+.search-form input {
+  border-radius: 5px 0 0 5px;
+}
+
+.search-form button {
+  border-radius: 0 5px 5px 0;
+}
+
+.form-control:focus {
+  box-shadow: none !important;
+}
