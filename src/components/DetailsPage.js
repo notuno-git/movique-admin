@@ -155,14 +155,16 @@ import db from "../appwrite/database";
 import { toast } from 'react-toastify';
 import { Form, Button } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import { Query } from "appwrite";
 
 const DetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate()
   const [movie, setMovie] = useState(null);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [reviewId, setReviewId] = useState(null);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -184,29 +186,50 @@ const DetailsPage = () => {
       }
     };
 
+
+    const fetchReview = async () => {
+      try {
+        const response = await db.movies.list([
+          Query.equal('movie_id', id)
+        ]);
+        if (response.documents.length > 0) {
+          const existingReview = response.documents[0];
+          setReviewId(existingReview.$id);
+          setRating(existingReview.star);
+          setTitle(existingReview.title_description);
+          setDescription(existingReview.description);
+        }
+      } catch (error) {
+        console.error('Error fetching the review:', error);
+      }
+    };
+
     fetchMovieDetails();
+    fetchReview();
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       movie_id: id,
-      star: parseInt(rating, 10),
+      star: rating,
       title_description: title,
       description: description
     };
 
-    try {
-      console.log(payload, 'payload');
-      await db.movies.create(payload);
-      alert('Review submitted successfully!');
-      setRating(1)
-      setTitle('')
-      setDescription('')
-
+  try {
+      if (reviewId) {
+        // Update existing review
+        await db.movies.update(reviewId, payload);
+        alert('Review updated successfully!');
+      } else {
+        // Create new review
+        await db.movies.create(payload);
+        alert('Review submitted successfully!');
+      }
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert('Error submitting review.');
+      toast.error('Error submitting review.');
     }
   };
 
@@ -267,9 +290,9 @@ const DetailsPage = () => {
           <p className='result'><b>Revenue: </b>${movie.revenue}</p>
           <p className='result'><b>Director: </b>{movie.director}</p>
           <p className='result'><b>Writer: </b>{movie.writer}</p>
-          <p className='result'>
+          {/* <p className='result'>
             <a href={`https://www.movique.in/movies/${id}`} target="_blank" rel="noopener noreferrer" className="btn btn-lists my-2">View on movique website</a>
-          </p>
+          </p> */}
         </div>
 
         <div className="container mt-5">
