@@ -155,6 +155,7 @@ import { toast } from 'react-toastify';
 import { Form, Button } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { Query } from "appwrite";
+import withAuth from '../appwrite/auth'
 
 const DetailsPage = () => {
   const { id } = useParams();
@@ -344,5 +345,5 @@ const DetailsPage = () => {
   );
 };
 
-export default DetailsPage;
+export default withAuth(DetailsPage);
 

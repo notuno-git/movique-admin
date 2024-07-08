@@ -3,6 +3,7 @@ import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import img from '../layout/logo.webp';
+import withAuth from '../appwrite/auth'
 
 const customStyles = {
   header: {
@@ -114,4 +115,4 @@ const SearchMovies = () => {
   );
 };
 
-export default SearchMovies;
+export default withAuth(SearchMovies);

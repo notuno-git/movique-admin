@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { Form, Button } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { Query } from "appwrite";
+import withAuth from '../appwrite/auth'
 
 const TvDetailsPage = () => {
   const { id } = useParams();
@@ -200,4 +201,4 @@ const TvDetailsPage = () => {
   );
 };
 
-export default TvDetailsPage;
+export default withAuth(TvDetailsPage);

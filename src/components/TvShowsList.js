@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import withAuth from '../appwrite/auth'
 
 const customStyles = {
   header: {
@@ -119,4 +120,4 @@ const TvShowsList = () => {
   );
 };
 
-export default TvShowsList;
+export default withAuth(TvShowsList);
