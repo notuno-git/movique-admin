@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate instead of useHistory
+import { useNavigate } from 'react-router-dom';
 import { account } from '../appwrite/config';
 import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // useNavigate hook
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await account.createSession(email, password);
+      // Only email and password are needed to create a session
+      await account.createEmailPasswordSession(email, password);
       console.log('Logged in successfully!');
       toast.success('Logged in successfully!');
       navigate('/'); // Redirect to home page after successful login
     } catch (error) {
       toast.error('Failed to login: ' + error.message);
       console.error('Failed to login:', error);
+      console.log('Error Details:', {
+        message: error.message,
+        type: error.type,
+        code: error.code,
+        version: error.version
+      });
     }
   };
 
